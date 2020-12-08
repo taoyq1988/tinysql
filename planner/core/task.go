@@ -14,6 +14,7 @@
 package core
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/pingcap/tidb/expression"
@@ -272,6 +273,7 @@ func splitCopAvg2CountAndSum(p PhysicalPlan) {
 // finishCopTask means we close the coprocessor task and create a root task.
 func finishCopTask(ctx sessionctx.Context, task task) task {
 	t, ok := task.(*copTask)
+	fmt.Printf("=== task %v\n", task)
 	if !ok {
 		return task
 	}

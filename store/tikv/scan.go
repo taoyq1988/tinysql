@@ -16,7 +16,6 @@ package tikv
 import (
 	"bytes"
 	"context"
-
 	pb "github.com/pingcap-incubator/tinykv/proto/pkg/kvrpcpb"
 	"github.com/pingcap/errors"
 	"github.com/pingcap/tidb/kv"
@@ -153,7 +152,12 @@ func (s *Scanner) resolveCurrentLock(bo *Backoffer, current *pb.KvPair) error {
 	return nil
 }
 
+var skipGetData = true
+
 func (s *Scanner) getData(bo *Backoffer) error {
+	if skipGetData {
+		//return nil
+	}
 	logutil.BgLogger().Debug("txn getData",
 		zap.Stringer("nextStartKey", s.nextStartKey),
 		zap.Stringer("nextEndKey", s.nextEndKey),

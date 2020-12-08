@@ -14,6 +14,7 @@
 package core
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/pingcap/tidb/expression"
@@ -93,6 +94,7 @@ func (p *LogicalShowDDLJobs) findBestTask(prop *property.PhysicalProperty) (task
 
 // findBestTask implements LogicalPlan interface.
 func (p *baseLogicalPlan) findBestTask(prop *property.PhysicalProperty) (bestTask task, err error) {
+	fmt.Println("******** find best task")
 	// Look up the task with this prop in the task map.
 	// It's used to reduce double counting.
 	bestTask = p.getTask(prop)

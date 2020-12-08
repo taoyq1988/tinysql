@@ -484,6 +484,9 @@ func (sender *copIteratorTaskSender) run() {
 }
 
 func (it *copIterator) recvFromRespCh(ctx context.Context, respCh <-chan *copResponse) (resp *copResponse, ok bool, exit bool) {
+	defer func() {
+		fmt.Printf("=== [recvFromRespCh] return ok %v, exit %v\n", ok, exit)
+	}()
 	select {
 	case resp, ok = <-respCh:
 	case <-it.finishCh:

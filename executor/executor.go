@@ -158,6 +158,7 @@ func Next(ctx context.Context, e Executor, req *chunk.Chunk) error {
 	if atomic.CompareAndSwapUint32(&sessVars.Killed, 1, 0) {
 		return ErrQueryInterrupted
 	}
+	fmt.Printf("=== [Next] next to exec %T\n", e)
 	return e.Next(ctx, req)
 }
 
@@ -378,6 +379,7 @@ func (e *SelectionExec) Close() error {
 
 // Next implements the Executor Next interface.
 func (e *SelectionExec) Next(ctx context.Context, req *chunk.Chunk) error {
+	fmt.Println("====== select exec ======")
 	req.GrowAndReset(e.maxChunkSize)
 
 	if !e.batched {

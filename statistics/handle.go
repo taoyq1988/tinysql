@@ -104,8 +104,13 @@ func DurationToTS(d time.Duration) uint64 {
 	return oracle.ComposeTS(d.Nanoseconds()/int64(time.Millisecond), 0)
 }
 
+var skipUpdate = true
+
 // Update reads stats meta from store and updates the stats map.
 func (h *Handle) Update(is infoschema.InfoSchema) error {
+	if skipUpdate {
+		return nil
+	}
 	oldCache := h.statsCache.Load().(statsCache)
 	lastVersion := oldCache.version
 	// We need this because for two tables, the smaller version may write later than the one with larger version.

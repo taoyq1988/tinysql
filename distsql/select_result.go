@@ -15,6 +15,7 @@ package distsql
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/pingcap/errors"
@@ -79,6 +80,7 @@ func (r *selectResult) fetchResp(ctx context.Context) error {
 			return nil
 		}
 		r.selectResp = new(tipb.SelectResponse)
+		fmt.Printf("=== [fetchResp] get data %s, %v\n", string(resultSubset.GetData()), resultSubset.GetData())
 		err = r.selectResp.Unmarshal(resultSubset.GetData())
 		if err != nil {
 			return errors.Trace(err)

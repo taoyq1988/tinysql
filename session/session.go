@@ -359,6 +359,7 @@ func (s *session) ExecRestrictedSQL(sql string) ([]chunk.Row, []*ast.ResultField
 }
 
 func execRestrictedSQL(ctx context.Context, se *session, sql string) ([]chunk.Row, []*ast.ResultField, error) {
+	fmt.Printf("=== [execRestrictedSQL] execute sql %s\n", sql)
 	recordSets, err := se.Execute(ctx, sql)
 	if err != nil {
 		return nil, nil, err
@@ -567,6 +568,7 @@ func (s *session) Execute(ctx context.Context, sql string) (recordSets []sqlexec
 }
 
 func (s *session) execute(ctx context.Context, sql string) (recordSets []sqlexec.RecordSet, err error) {
+	fmt.Printf("=== [session] execute the sql %s\n", sql)
 	s.PrepareTxnCtx(ctx)
 	connID := s.sessionVars.ConnectionID
 	err = s.loadCommonGlobalVariablesIfNeeded()
@@ -592,6 +594,7 @@ func (s *session) execute(ctx context.Context, sql string) (recordSets []sqlexec
 	compiler := executor.Compiler{Ctx: s}
 	multiQuery := len(stmtNodes) > 1
 	for _, stmtNode := range stmtNodes {
+		fmt.Printf("=== [session] execute the stmtNode, %T, %v\n", stmtNode, stmtNode)
 		s.sessionVars.StartTime = time.Now()
 		s.PrepareTxnCtx(ctx)
 

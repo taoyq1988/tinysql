@@ -183,6 +183,7 @@ func (st *TxnState) Commit(ctx context.Context) error {
 		}
 	})
 
+	fmt.Printf("=== [Commit] TxnState commit %T\n", st.Transaction)
 	return st.Transaction.Commit(ctx)
 }
 

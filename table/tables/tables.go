@@ -20,6 +20,7 @@ package tables
 import (
 	"context"
 	"encoding/binary"
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -484,6 +485,7 @@ func (t *TableCommon) AddRecord(ctx sessionctx.Context, r []types.Datum, opts ..
 		return 0, err
 	}
 	value := writeBufs.RowValBuf
+	fmt.Printf("[write value] key: %s, value: %s ||| %v, %v\n", string(key), string(value), key, value)
 	if err = txn.Set(key, value); err != nil {
 		return 0, err
 	}

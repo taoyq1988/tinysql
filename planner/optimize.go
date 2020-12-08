@@ -15,6 +15,7 @@ package planner
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/pingcap/tidb/infoschema"
 	"github.com/pingcap/tidb/parser/ast"
@@ -39,6 +40,7 @@ func Optimize(ctx context.Context, sctx sessionctx.Context, node ast.Node, is in
 	}
 
 	names := p.OutputNames()
+	fmt.Println("=== [Optimize] out put names", names)
 
 	// Handle the non-logical plan statement.
 	logic, isLogicalPlan := p.(plannercore.LogicalPlan)

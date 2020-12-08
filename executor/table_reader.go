@@ -15,6 +15,7 @@ package executor
 
 import (
 	"context"
+	"fmt"
 	"github.com/pingcap/tidb/distsql"
 	"github.com/pingcap/tidb/kv"
 	"github.com/pingcap/tidb/parser/model"
@@ -129,6 +130,7 @@ func (tr *tableResultHandler) open(optionalResult, result distsql.SelectResult) 
 }
 
 func (tr *tableResultHandler) nextChunk(ctx context.Context, chk *chunk.Chunk) error {
+	fmt.Printf("=== [nextChunk] tr.optionalFinished %v\n", tr.optionalFinished)
 	if !tr.optionalFinished {
 		err := tr.optionalResult.Next(ctx, chk)
 		if err != nil {

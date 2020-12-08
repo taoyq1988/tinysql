@@ -16,6 +16,7 @@ package mocktikv
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/golang/protobuf/proto"
@@ -71,6 +72,7 @@ func (h *rpcHandler) handleCopDAGRequest(req *coprocessor.Request) *coprocessor.
 		}
 		rows = append(rows, row)
 	}
+	fmt.Printf("=== [handleCopDAGRequest] get rows %v\n", rows)
 
 	selResp := h.initSelectResponse(err, dagCtx.evalCtx.sc.GetWarnings(), e.Counts())
 	if err == nil {

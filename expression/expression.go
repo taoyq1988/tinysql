@@ -463,6 +463,7 @@ func TableInfo2SchemaAndNames(ctx sessionctx.Context, dbName model.CIStr, tbl *m
 			continue
 		}
 		ok := true
+		// 把索引包含的keys合并起来
 		newKey := make([]*Column, 0, len(idx.Columns))
 		for _, idxCol := range idx.Columns {
 			find := false
@@ -493,8 +494,10 @@ func TableInfo2SchemaAndNames(ctx sessionctx.Context, dbName model.CIStr, tbl *m
 			}
 		}
 	}
+	fmt.Printf("=== [TableInfo2SchemaAndNames] generate keys %v\n", keys)
 	schema := NewSchema(cols...)
 	schema.SetUniqueKeys(keys)
+	// 获取到数据表的schema（列信息和索引、外键信息），names是每一列的名字
 	return schema, names
 }
 

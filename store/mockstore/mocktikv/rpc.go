@@ -407,6 +407,9 @@ func (c *RPCClient) SendRequest(ctx context.Context, addr string, req *tikvrpc.R
 	if err != nil {
 		return nil, err
 	}
+	if req.Type != tikvrpc.CmdGet {
+		fmt.Printf("=== [SendRequest] receive req.Type %v\n", req.Type)
+	}
 	switch req.Type {
 	case tikvrpc.CmdGet:
 		r := req.Get()
@@ -522,6 +525,7 @@ func (c *RPCClient) SendRequest(ctx context.Context, addr string, req *tikvrpc.R
 			resp.Resp = &coprocessor.Response{RegionError: err}
 			return resp, nil
 		}
+		fmt.Printf("=== [SendRequest] req.Type %v, r.GetTp %v, startKey %s, endKey %s\n", req.Type, r.GetTp(), string(handler.startKey), string(handler.endKey))
 		handler.rawStartKey = MvccKey(handler.startKey).Raw()
 		handler.rawEndKey = MvccKey(handler.endKey).Raw()
 		var res *coprocessor.Response

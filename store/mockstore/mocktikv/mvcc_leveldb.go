@@ -15,6 +15,7 @@ package mocktikv
 
 import (
 	"bytes"
+	"fmt"
 	"math"
 	"sync"
 
@@ -601,11 +602,13 @@ func commitLock(batch *leveldb.Batch, lock mvccLock, key []byte, startTS, commit
 			commitTS:  commitTS,
 			value:     lock.value,
 		}
+		fmt.Printf("=== [commitLock] origin key: %s, value: %s, || %v, %v\n", string(key), string(value.value), key, value.value)
 		writeKey := mvccEncode(key, commitTS)
 		writeValue, err := value.MarshalBinary()
 		if err != nil {
 			return errors.Trace(err)
 		}
+		fmt.Printf("=== [commitLock] commit batch put key: %s, value: %s, || %v, %v\n", string(writeKey), string(writeValue), writeKey, writeValue)
 		batch.Put(writeKey, writeValue)
 	}
 	batch.Delete(mvccEncode(key, lockVer))

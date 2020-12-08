@@ -676,10 +676,12 @@ func (b *PlanBuilder) findDefaultValue(cols []*table.Column, name *ast.ColumnNam
 }
 
 func (b *PlanBuilder) buildInsert(ctx context.Context, insert *ast.InsertStmt) (Plan, error) {
+	fmt.Printf("=== [buiidInsert] buildInsert\n")
 	ts, ok := insert.Table.TableRefs.Left.(*ast.TableSource)
 	if !ok {
 		return nil, infoschema.ErrTableNotExists.GenWithStackByArgs()
 	}
+	fmt.Printf("=== [buiidInsert] buildInsert ok\n")
 	tn, ok := ts.Source.(*ast.TableName)
 	if !ok {
 		return nil, infoschema.ErrTableNotExists.GenWithStackByArgs()
@@ -759,6 +761,7 @@ func (b *PlanBuilder) getAffectCols(insertStmt *ast.InsertStmt, insertPlan *Inse
 		// 2. `INSERT INTO tbl_name SELECT ...`.
 		affectedValuesCols = insertPlan.Table.Cols()
 	}
+	fmt.Printf("=== [getAffectCols] get affected values cols %v\n", affectedValuesCols)
 	return affectedValuesCols, nil
 }
 
@@ -802,6 +805,7 @@ func (b *PlanBuilder) buildSetValuesOfInsert(ctx context.Context, insert *ast.In
 }
 
 func (b *PlanBuilder) buildValuesListOfInsert(ctx context.Context, insert *ast.InsertStmt, insertPlan *Insert, mockTablePlan *LogicalTableDual, checkRefColumn func(n ast.Node) ast.Node) error {
+	// 获取到受影响的列
 	affectedValuesCols, err := b.getAffectCols(insert, insertPlan)
 	if err != nil {
 		return err
@@ -856,6 +860,7 @@ func (b *PlanBuilder) buildValuesListOfInsert(ctx context.Context, insert *ast.I
 			}
 			exprList = append(exprList, expr)
 		}
+		// 构建一系列值表达式
 		insertPlan.Lists = append(insertPlan.Lists, exprList)
 	}
 	return nil

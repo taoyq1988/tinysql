@@ -15,6 +15,7 @@ package executor
 
 import (
 	"context"
+	"fmt"
 	"math"
 
 	"github.com/pingcap/errors"
@@ -208,6 +209,7 @@ func insertRows(ctx context.Context, base insertCommon) (err error) {
 		}
 		rows = append(rows, row)
 	}
+	logutil.BgLogger().Warn("insert rows")
 	// Fill the batch allocated autoIDs.
 	rows, err = e.lazyAdjustAutoIncrementDatum(ctx, rows)
 	if err != nil {
@@ -665,6 +667,7 @@ func (e *InsertValues) addRecord(ctx context.Context, row []types.Datum) (int64,
 	if !e.ctx.GetSessionVars().ConstraintCheckInPlace {
 		txn.SetOption(kv.PresumeKeyNotExists, nil)
 	}
+	fmt.Printf("=== [addRecord] add record type, %T\n", e.Table)
 	h, err := e.Table.AddRecord(e.ctx, row, table.WithCtx(ctx))
 	txn.DelOption(kv.PresumeKeyNotExists)
 	if err != nil {

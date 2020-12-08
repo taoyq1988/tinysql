@@ -236,6 +236,7 @@ func (a *ExecStmt) buildExecutor() (Executor, error) {
 	ctx := a.Ctx
 
 	b := newExecutorBuilder(ctx, a.InfoSchema)
+	fmt.Printf("=== [buildExecutor] build executor by plan %T, %v\n", a.Plan, a.Plan)
 	e := b.build(a.Plan)
 	if b.err != nil {
 		return nil, errors.Trace(b.err)
